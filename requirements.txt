@@ -2,3 +2,4 @@ Flask
 yt-dlp
 pydub
 ffmpeg-python
+flask-socketio

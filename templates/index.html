@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube to MP3 Downloader</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
 </head>
 <body>
     <h1>YouTube to MP3 Downloader</h1>
@@ -12,5 +13,28 @@
         <input type="text" id="url" name="url" required>
         <button type="submit">Download MP3</button>
     </form>
+    <div id="logs">
+        <h2>Logs:</h2>
+        <pre id="log_messages"></pre>
+    </div>
+    <div id="download_link" style="display: none;">
+        <h2>Download Complete:</h2>
+        <a id="download_file_link" href="#" download>Download MP3</a>
+    </div>
+
+    <script>
+        var socket = io();
+        socket.on('log_message', function(data) {
+            var logMessages = document.getElementById('log_messages');
+            logMessages.textContent += data.message + '\n';
+        });
+
+        socket.on('download_complete', function(data) {
+            var downloadLinkDiv = document.getElementById('download_link');
+            var downloadFileLink = document.getElementById('download_file_link');
+            downloadFileLink.href = '/download_file?file_path=' + encodeURIComponent(data.file_path);
+            downloadLinkDiv.style.display = 'block';
+        });
+    </script>
 </body>
 </html>
